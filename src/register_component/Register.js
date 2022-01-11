@@ -62,7 +62,7 @@ class Register extends React.Component{
         if(this.state.valueUsername === ''){
 			this.setState({
 				showErrorUsername : true,
-				usernameError : 'Username can\'t be empty!'
+				usernameError : 'Username can not be empty!'
 			});
 		}
 

@@ -1,3 +1,4 @@
+import { eventWrapper } from "@testing-library/user-event/dist/utils";
 import React from "react";
 
 class Login extends React.Component {
@@ -6,7 +7,11 @@ class Login extends React.Component {
 
         this.state = {
             valueUsername : '',
-            valuePassword : ''
+            valuePassword : '',
+            showErrorUsername : false,
+            showErrorPassword : false,
+            usernameError : '',
+            passwordError : ''
         }
     }
 
@@ -14,17 +19,41 @@ class Login extends React.Component {
         this.setState({
             valueUsername : event.target.value
         })
+        if(this.state.valueUsername !== ''){
+            this.setState({
+                showErrorUsername : false,
+                usernameError : ''
+            })
+        }
     }
 
     handlePasswordChange = (event) => {
         this.setState({
             valuePassword : event.target.value
         })
+
+        if(this.state.valuePassword.length >= 8){
+            this.setState({
+                showErrorPassword : false,
+                passwordError : ''
+            })
+        }
     }
 
     handleSubmit = (event) => {
-        if(this.state.valueUsername == ''){
+        event.preventDefault();
+        if(this.state.valueUsername === ''){
+            this.setState({
+                showErrorUsername : true,
+                usernameError : 'Username can not be empty!'
+            })
+        }
 
+        if(this.state.valuePassword.length < 8){
+            this.setState({
+                showErrorPassword : true,
+                passwordError : 'Length of password at least 8 characters'
+            })
         }
     }
     
@@ -39,11 +68,17 @@ class Login extends React.Component {
                 <form onSubmit={this.handleSubmit}>
                     <div class="mb-3">
                         <label for="username" class="form-label">Username</label>
-                        <input type="text" className="form-control" id="username" value={this.state.valueUsername} onChange={this.handleUsernameChange} />
+                        <input type="text" className={`form-control ${this.state.showErrorUsername ? 'is-invalid' : '' }`} id="username" value={this.state.valueUsername} onChange={this.handleUsernameChange} />
+                        <div className="invalid-feedback">
+							{this.state.usernameError}
+						</div>
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" value={this.state.valuePassword} onChange={this.handlePasswordChange} />
+                        <input type="password" className={`form-control ${this.state.showErrorPassword ? 'is-invalid' : ''}`} id="password" value={this.state.valuePassword} onChange={this.handlePasswordChange} />
+                        <div className="invalid-feedback">
+							{this.state.passwordError}
+						</div>
                     </div>
                     <button type="submit" class="btn btn-primary">Login</button>
                 </form>
