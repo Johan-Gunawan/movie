@@ -6,7 +6,7 @@ class Login extends React.Component {
 
         this.state = {
             valueUsername : '',
-            valuePassword : '' 
+            valuePassword : ''
         }
     }
 
@@ -23,11 +23,15 @@ class Login extends React.Component {
     }
 
     handleSubmit = (event) => {
-        alert(`Username : ${this.state.valueUsername} Password : ${this.state.valuePassword}`);
+        if(this.state.valueUsername == ''){
+
+        }
     }
     
 
     render(){
+
+
         return (
             <div className="login-container container col-md-5 col-12 mt-5 bg-light rounded shadow p-4">
                 <h1>Login Form</h1>
