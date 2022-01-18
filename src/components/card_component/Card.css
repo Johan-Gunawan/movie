@@ -1,0 +1,34 @@
+.card-body{
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: 0.3s all;    
+    color:white;
+    font-weight: bold;
+}
+
+.card:hover  .card-body{
+    opacity: 1;
+    background: rgba(0,0,0,0.5);
+}
+
+.card-title{
+    text-align: center;
+    font-size: 15px;
+}
+
+.card-body .favorite-button{
+    background: none;
+}
+
+.card-body .favorite-button:hover{
+    background: rgb(255, 70, 70);
+}
+
+.card-body .favorite-button.liked{
+    background: rgb(255, 70, 70);
+}
+
+.card-body .vote{
+
+}

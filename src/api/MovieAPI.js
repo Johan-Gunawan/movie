@@ -1,9 +1,8 @@
-import axios from "axios";
+import instance from "./Axios";
+import {dataMovie} from './FetchURL';
 
 const GetListMovies = async (page) => {
-    return await axios.get(process.env.REACT_APP_API_URL+'movie/now_playing?api_key='+REACT_APP_API_KEY+'&language=en-US&page='+page);
+    return await instance.get(dataMovie.nowPlayingMovie);
 }
-
-
 
 export {GetListMovies}
