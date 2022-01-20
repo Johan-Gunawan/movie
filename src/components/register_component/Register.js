@@ -1,7 +1,7 @@
 import React from "react";
 import { db } from "../../DexieDB";
 import {Navigate} from 'react-router-dom';
-import { cryptPassword } from "../../utils/Encryption";
+import { hashPassword } from "../../utils/Encryption";
 
 class Register extends React.Component{
 	constructor(props){
@@ -89,20 +89,17 @@ class Register extends React.Component{
 		
 		if(success){
 			db.open();
-
-			// cryptPassword(this.state.valuePassword , async (err,cryptedPassword) => {
-				// console.log(cryptedPassword);
 				const id = await db.users.add({
 					username : this.state.valueUsername,
-					password : this.state.valuePassword
+					password : hashPassword(this.state.valuePassword).toString(),
+					token : ''
 				})
-			// })
+
+				this.setState({
+					redirectToLogin : true
+				})
 
 			db.close();
-
-			// this.setState({
-			// 	redirectToLogin : true
-			// })
 		}
 		
     }

@@ -2,6 +2,9 @@ import { eventWrapper } from "@testing-library/user-event/dist/utils";
 import React from "react";
 import {Navigate} from 'react-router-dom';
 import { db } from "../../DexieDB";
+import { comparePassword } from '../../utils/Encryption';
+import { generateToken } from '../../utils/Functions';
+
 class Login extends React.Component {
     constructor(props){
         super(props);
@@ -65,10 +68,30 @@ class Login extends React.Component {
         if(success){
             const user = await db.users.where('username').equals(this.state.valueUsername).first();
             console.log(user);
-
-            // this.setState({
-            //     redirectToHome : true
-            // })
+            if(user == undefined){
+                this.setState({
+                    showErrorUsername : true,
+                    usernameError : 'Username not found',
+                    valuePassword : ''
+                });
+            }
+            else{
+                if(comparePassword(this.state.valuePassword,user.password)){
+                    const result = await db.users.update(user.id,{token : generateToken()});
+                    
+                    this.setState({
+                        redirectToHome : true
+                    });
+                }
+                else{
+                    this.setState({
+                        showErrorPassword : true,
+                        passwordError : 'Wrong password!'
+                    })
+                    
+                }
+                
+            }
         }
     }
     
