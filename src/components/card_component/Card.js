@@ -2,6 +2,7 @@ import React from "react";
 import {IMAGE_URL} from '../../Constant';
 import './Card.css';
 import { db } from "../../DexieDB";
+import {Link} from 'react-router-dom' 
 
 class Card extends React.Component{
     constructor(props){
@@ -10,7 +11,8 @@ class Card extends React.Component{
         this.state = {
             movie : props.movie,
             favorite : false,
-            showError : false
+            showError : false,
+            imageCard :  IMAGE_URL+'/w200/'+this.props.movie.poster_path
         }
     }
 
@@ -40,15 +42,20 @@ class Card extends React.Component{
     render(){
         return(
             <div className="card col-2 p-0 m-3 position-relative">
-                <img  src={IMAGE_URL+'/w200/'+this.props.movie.poster_path} className="card-img-top card-img" alt="-"/>
+                <img  src={this.state.imageCard} className="card-img-top card-img" alt="-"/>
                 <div className="card-body position-absolute">
-                    <div className="vote">{this.props.movie.vote_average}</div>
-                    <div className="popularity">{this.props.movie.vote_average}</div>
-                    <div className="title">
-                        <h5 className="card-title">{this.props.movie.title}</h5>    
+                    <div className="info position-absolute p-2">
+                        <div className="vote mb-2"><i className="fas fa-star"></i> {this.props.movie.vote_average}</div>
+                        <div className="release mb-3"><i class="far fa-calendar-minus"></i> {this.props.movie.release_date}</div>
+                        <div className="title">
+                            <h5 className="card-title">{this.props.movie.title}</h5>    
+                        </div>
+                        <div className="detail-link text-center">
+                            <Link to={`/detail/${this.props.movie.id}`} className="nav-link active" aria-current="page" href="#">Detail <i class="fas fa-angle-right"></i></Link>
+                        </div>
                     </div>
-                    <button className={`favorite-button btn btn-secondary ${this.state.favorite ? 'favorite' : ''}`} onClick={this.handleOnClick}><i className="fas fa-plus"></i></button>
                 </div>
+                <button className={`favorite-button btn`} onClick={this.handleOnClick}>{this.state.favorite ? <i className="fas fa-heart favorite"></i> : <i className="far fa-heart"></i> } </button>
             </div>
         )
     }

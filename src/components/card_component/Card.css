@@ -7,6 +7,20 @@
     font-weight: bold;
 }
 
+.card-body .info{
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.card-body .detail-link a{
+    color: rgb(255, 70, 70);;
+}
+
+.card-body .info .vote .fa-star{
+    color: gold;
+}
+
 .card:hover  .card-body{
     opacity: 1;
     background: rgba(0,0,0,0.5);
@@ -14,19 +28,26 @@
 
 .card-title{
     text-align: center;
-    font-size: 15px;
+    font-size: 20px;
 }
 
-.card-body .favorite-button{
+.favorite-button{
+    position:absolute;
+    right: 0px;
+    top: 0px;
+    border: none;
     background: none;
+    font-size: 30px;
+    color: white;
+    padding: 0px 5px 0px ;
+    background-color: black;
+}
+.favorite-button:hover{
+    color: rgb(255, 70, 70);
 }
 
-.card-body .favorite-button:hover{
-    background: rgb(255, 70, 70);
-}
-
-.card-body .favorite-button.favorite{
-    background: rgb(255, 70, 70);
+.favorite-button .favorite{
+    color: rgb(255, 70, 70);
 }
 
 .card-body .vote{
