@@ -88,18 +88,15 @@ class Register extends React.Component{
 		}
 		
 		if(success){
-			db.open();
-				const id = await db.users.add({
-					username : this.state.valueUsername,
-					password : hashPassword(this.state.valuePassword).toString(),
-					token : ''
-				})
+			const id = await db.users.add({
+				username : this.state.valueUsername,
+				password : hashPassword(this.state.valuePassword).toString(),
+				token : ''
+			})
 
-				this.setState({
-					redirectToLogin : true
-				})
-
-			db.close();
+			this.setState({
+				redirectToLogin : true
+			})
 		}
 		
     }

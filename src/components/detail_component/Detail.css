@@ -1,0 +1,28 @@
+.poster-movie img{
+    height: 600px;
+}
+
+.image-movie img{
+    width: 100%;
+}
+
+.info-movie .general-info {
+    color: lightgray;
+}
+
+.info-movie .rating{
+    font-size: 25px;
+}
+
+.info-movie .rating .fa-star{
+    color: gold;
+}
+
+.general-info .break{
+    margin: 0 10px;
+}
+
+.companies .company img{
+    height: auto;
+    width: 120px;
+}

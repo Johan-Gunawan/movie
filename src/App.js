@@ -4,6 +4,8 @@ import Login from './components/login_component/Login';
 import Register from './components/register_component/Register';
 import Detail from './components/detail_component/Detail';
 import Home from './components/home_component/Home';
+import Favorite from './components/favorite_component/Favorite';
+
 
 function App() {
 	return (
@@ -15,6 +17,7 @@ function App() {
 					<Route path="/login" element={<Login />} />
 					<Route path="/register" element={<Register />} />
 					<Route path="/detail/:id" element={<Detail />} />
+					<Route path="/favorite" element={<Favorite />} />
 				</Routes>
 				</BrowserRouter>
 			

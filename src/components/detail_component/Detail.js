@@ -1,7 +1,7 @@
 import React from "react";
 import { IMAGE_URL } from "../../Constant";
 import {GetDetailMovie} from "../../api/MovieAPI";
-import {matchPath, useParams} from 'react-router-dom'
+import './Detail.css'
 
 
 
@@ -11,7 +11,17 @@ class Detail extends React.Component{
         super(props);
         
         this.state = {
-            // imageBackdrop : IMAGE_URL+'w500'+props.movie.backdrop_path
+            title : '',
+            genres : [],
+            release : '',
+            companies : [],
+            countries : [],
+            vote: 0,
+            popularity : 0,
+            overview : '',
+            hour : 0,
+            minute : 0,
+            poster: ''
         }
     }
 
@@ -21,6 +31,19 @@ class Detail extends React.Component{
         
         GetDetailMovie(id).then((res) => {
             console.log(res);
+            this.setState({
+                title : res.data.title,
+                genres : res.data.genres,
+                release_year : res.data.release_date.split('-')[0],
+                companies : res.data.production_companies,
+                countries : res.data.production_countries,
+                vote: res.data.vote_average,
+                popularity : res.data.popularity,
+                overview : res.data.overview,
+                hour : parseInt(res.data.runtime/60),
+                minute : res.data.runtime%60,
+                poster : res.data.belongs_to_collection.poster_path
+            })
         })
     }
 
@@ -28,22 +51,41 @@ class Detail extends React.Component{
 
     render(){
         return(
-            <div className="detail-container">
-                <div className="image-movie">
-                    {/* <img src={this.state.imageBackdrop} alt={this.state.imageBackdrop} />     */}
+            <div className="detail-container shadow container mx-auto row p-3 my-3">
+                <div className="poster-movie col-12 col-md-5">
+                    <img src={IMAGE_URL+'w500'+this.state.poster}  className="w-100"/>
                 </div>
-                {/* <div className="info-movie">
-                    <h3 className="title">{this.props.movie.title}</h3>
-                    <h5 className="vote">{this.props.movie.vote_average}</h5>
-                    <h5 className="populatiry">{this.props.movie.popularity}</h5>
-                    <h5 className="release">{this.props.movie.popularity}</h5>
-                    <hr />
-                    <div className="description">
-                        <p>
-                            {this.props.movie.overview}  
-                        </p>
+                <div className="info-movie col-12 col-md-6">
+                    <h1 className="title">{this.state.title}</h1>
+                    <div className="general-info">
+                        {this.state.genres.map((genre,index) => {
+                            return <small key={genre.id}>{genre.name} {index !== this.state.genres.length-1 ? ' / ' : ''}</small>
+                        })}
+                        <small className="break">| </small>
+                        <small>{this.state.hour}h {this.state.minute}m</small>
+                        <small className="break"> | </small>
+                        <small>{this.state.release_year}</small>
                     </div>
-                </div> */}
+                    
+                    <p className="rating">
+                        <i className="fas fa-star"></i> {this.state.vote}
+                    </p>
+
+                    <div className="overview">
+                        <h4>Overview</h4>
+                        {this.state.overview}
+                    </div>
+                    <div className="companies row g-0 mt-3">
+                        <h4>Production Companies</h4>
+                        {this.state.companies.map(company => {
+                            return <div key={company.id} className="company col-5 col-md-3 m-1 d-flex align-items-center">
+                                        <div className="image">
+                                            <img src={IMAGE_URL+'w200'+company.logo_path} alt={company.logo_path} style={company.id == 34 ? {width:70} : {}}/>
+                                        </div>
+                                    </div>
+                        })}
+                    </div>
+                </div>
             </div>
         );
     }

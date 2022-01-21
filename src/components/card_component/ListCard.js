@@ -7,7 +7,7 @@ class ListCard extends React.Component{
     }
     render(){
         return(
-            <div className="container-card row justify-content-around">
+            <div className="container-card row flex-wrap justify-content-around">
                 {this.props.movies.map(item => 
                     <Card key={item.id} movie={item}/>
                 )}

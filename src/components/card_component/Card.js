@@ -1,47 +1,76 @@
 import React from "react";
 import {IMAGE_URL} from '../../Constant';
 import './Card.css';
-import { db } from "../../DexieDB";
 import {Link} from 'react-router-dom' 
+import {getOneFavoriteMovie, addOneFavoriteMovie, deleteOneFavoriteMovie} from '../../models/FavoriteMovie';
+import { getOneUserByToken } from "../../models/User";
+import {getToken} from '../../UserToken';
 
 class Card extends React.Component{
     constructor(props){
         super(props);
-
+        
         this.state = {
+            id : -1,
             movie : props.movie,
+            imageCard :  IMAGE_URL+'/w200/'+this.props.movie.poster_path,
             favorite : false,
             showError : false,
-            imageCard :  IMAGE_URL+'/w200/'+this.props.movie.poster_path
+            showFavoriteButton : true,
         }
+    }
+
+    componentDidMount(){
+        const sessionToken = getToken();
+        getOneUserByToken(sessionToken).then((userdData) => {
+            if(userdData !== undefined){
+                getOneFavoriteMovie(this.props.movie.id,userdData.id).then((res) => {
+                    if(res !== undefined){
+                        this.setState({
+                            favorite : true
+                        })
+                    }
+                })
+            }
+            else{
+                this.setState({
+                    showFavoriteButton : false
+                })
+            }
+        })
     }
 
     handleOnClick = async (event) => {
         try{
-            db.open();
-            const id = await db.favorite_movies.add({
-                id : this.props.movie.id,
-                title : this.props.movie.title,
-                description : this.props.movie.overview,
-                vote : this.props.movie.vote_average,
-                poster : this.props.movie.poster_path,
-                release_date : this.props.movie.release_date
-            });
-            db.close();
-            this.setState({
-                favorite : true
-            })
-
+            const sessionToken = getToken();
+            const userData = await getOneUserByToken(sessionToken);
+            const favoriteData = await getOneFavoriteMovie(this.props.movie.id,userData.id);
+            console.log(favoriteData);
+            if(favoriteData === undefined){
+                const id = await addOneFavoriteMovie(this.props.movie,userData.id);
+                if(id > 0){
+                    this.setState({
+                        favorite : true
+                    })
+                }
+            }
+            else{
+                const result = await deleteOneFavoriteMovie(this.props.movie.id,userData.id);
+                this.setState({
+                    favorite : false
+                })
+            }
         }
         catch(err){
-            alert("Gagal menambahkan data, Periksa kembali data yang anda tambahkan!");
+            console.log(err);
+            alert(err.message);
         }
     }
 
 
     render(){
         return(
-            <div className="card col-2 p-0 m-3 position-relative">
+            <div className="card col-4 col-md-2 p-0 m-1 m-md-2 position-relative">
                 <img  src={this.state.imageCard} className="card-img-top card-img" alt="-"/>
                 <div className="card-body position-absolute">
                     <div className="info position-absolute p-2">
@@ -55,7 +84,7 @@ class Card extends React.Component{
                         </div>
                     </div>
                 </div>
-                <button className={`favorite-button btn`} onClick={this.handleOnClick}>{this.state.favorite ? <i className="fas fa-heart favorite"></i> : <i className="far fa-heart"></i> } </button>
+                {this.state.showFavoriteButton && <button className={`favorite-button btn`} onClick={this.handleOnClick}>{this.state.favorite ? <i className="fas fa-heart favorite"></i> : <i className="far fa-heart"></i> } </button>}
             </div>
         )
     }

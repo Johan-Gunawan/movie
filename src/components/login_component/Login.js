@@ -4,6 +4,7 @@ import {Navigate} from 'react-router-dom';
 import { db } from "../../DexieDB";
 import { comparePassword } from '../../utils/Encryption';
 import { generateToken } from '../../utils/Functions';
+import {setToken} from '../../UserToken';
 
 class Login extends React.Component {
     constructor(props){
@@ -68,7 +69,7 @@ class Login extends React.Component {
         if(success){
             const user = await db.users.where('username').equals(this.state.valueUsername).first();
             console.log(user);
-            if(user == undefined){
+            if(user === undefined){
                 this.setState({
                     showErrorUsername : true,
                     usernameError : 'Username not found',
@@ -77,8 +78,11 @@ class Login extends React.Component {
             }
             else{
                 if(comparePassword(this.state.valuePassword,user.password)){
-                    const result = await db.users.update(user.id,{token : generateToken()});
+                    const newToken = generateToken();
+                    const result = await db.users.update(user.id,{token : newToken });
                     
+                    setToken(newToken);
+
                     this.setState({
                         redirectToHome : true
                     });
@@ -88,9 +92,7 @@ class Login extends React.Component {
                         showErrorPassword : true,
                         passwordError : 'Wrong password!'
                     })
-                    
-                }
-                
+                }   
             }
         }
     }
@@ -98,9 +100,7 @@ class Login extends React.Component {
 
     render(){
         if(this.state.redirectToHome){
-            return (
-                <Navigate to="/" />
-            )
+            window.location = '/';
         }
 
         return (
