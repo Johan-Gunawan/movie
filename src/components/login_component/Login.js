@@ -68,7 +68,6 @@ class Login extends React.Component {
 
         if(success){
             const user = await db.users.where('username').equals(this.state.valueUsername).first();
-            console.log(user);
             if(user === undefined){
                 this.setState({
                     showErrorUsername : true,

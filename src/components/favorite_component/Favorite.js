@@ -8,26 +8,37 @@ class Favorite extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            listMovies : []
+            listMovies : [],
+            showMovie : false
         }
     }
 
     componentDidMount(){
         const sessionToken = getToken();
         getOneUserByToken(sessionToken).then(async (userData) => {
-            console.log(await getAllFavoriteMovieByUserId(userData.id));
             this.setState({
-              listMovies : await getAllFavoriteMovieByUserId(userData.id)
+              listMovies : await getAllFavoriteMovieByUserId(userData.id),
+              showMovie : true
+            })
+        })
+    }
+
+    getFavoriteMovieListener = () =>{
+        const sessionToken = getToken();
+        getOneUserByToken(sessionToken).then(async (userData) => {
+            this.setState({
+              listMovies : await getAllFavoriteMovieByUserId(userData.id),
+              showMovie : true
             })
         })
     }
 
     render(){
         return (
-            <div className='favorite-container'>
+            <div className='favorite-container p-3'>
                 <h1>Favorite Movies</h1>
                 <hr/>
-                <ListCard movies={this.state.listMovies} />
+                <ListCard movies={this.state.listMovies} favoriteMovieListener={this.getFavoriteMovieListener} favoritePage={true} />
             </div>
         )
     }

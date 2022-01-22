@@ -16,15 +16,21 @@ class Card extends React.Component{
             imageCard :  IMAGE_URL+'/w200/'+this.props.movie.poster_path,
             favorite : false,
             showError : false,
-            showFavoriteButton : true,
+            showFavoriteButton : true && !props.favoritePage,
+            showDeleteButton : props.favoritePage
         }
     }
 
     componentDidMount(){
         const sessionToken = getToken();
-        getOneUserByToken(sessionToken).then((userdData) => {
-            if(userdData !== undefined){
-                getOneFavoriteMovie(this.props.movie.id,userdData.id).then((res) => {
+        getOneUserByToken(sessionToken).then((userData) => {
+            if(userData !== undefined){
+                let movieId = this.props.movie.id;
+                if(this.props.movie.movie_id !== undefined){
+                    movieId = this.props.movie.movie_id
+                }
+
+                getOneFavoriteMovie(movieId,userData.id).then((res) => {
                     if(res !== undefined){
                         this.setState({
                             favorite : true
@@ -44,8 +50,13 @@ class Card extends React.Component{
         try{
             const sessionToken = getToken();
             const userData = await getOneUserByToken(sessionToken);
-            const favoriteData = await getOneFavoriteMovie(this.props.movie.id,userData.id);
-            console.log(favoriteData);
+
+            let movieId = this.props.movie.id;
+            if(this.props.movie.movie_id !== undefined){
+                movieId = this.props.movie.movie_id
+            }
+
+            const favoriteData = await getOneFavoriteMovie(movieId,userData.id);
             if(favoriteData === undefined){
                 const id = await addOneFavoriteMovie(this.props.movie,userData.id);
                 if(id > 0){
@@ -67,10 +78,18 @@ class Card extends React.Component{
         }
     }
 
+    handleOnDelete = async () =>{
+        const movieId = this.props.movie.movie_id;
+
+        const sessionToken = getToken();
+        const userData = await getOneUserByToken(sessionToken);
+        this.props.deleteMovieListener(movieId,userData.id)
+    }
+
 
     render(){
         return(
-            <div className="card col-4 col-md-2 p-0 m-1 m-md-2 position-relative">
+            <div className="card p-0 m-1 m-md-2 position-relative">
                 <img  src={this.state.imageCard} className="card-img-top card-img" alt="-"/>
                 <div className="card-body position-absolute">
                     <div className="info position-absolute p-2">
@@ -80,9 +99,10 @@ class Card extends React.Component{
                             <h5 className="card-title">{this.props.movie.title}</h5>    
                         </div>
                         <div className="detail-link text-center">
-                            <Link to={`/detail/${this.props.movie.id}`} className="nav-link active" aria-current="page" href="#">Detail <i class="fas fa-angle-right"></i></Link>
+                            <Link to={`/detail/${this.props.movie.movie_id !== undefined ? this.props.movie.movie_id : this.props.movie.id}`} className="nav-link active" aria-current="page" href="#">Detail <i class="fas fa-angle-right"></i></Link>
                         </div>
                     </div>
+                    {this.state.showDeleteButton && <button className={`delete-button btn`} onClick={this.handleOnDelete}><i class="far fa-trash-alt"></i></button>}
                 </div>
                 {this.state.showFavoriteButton && <button className={`favorite-button btn`} onClick={this.handleOnClick}>{this.state.favorite ? <i className="fas fa-heart favorite"></i> : <i className="far fa-heart"></i> } </button>}
             </div>

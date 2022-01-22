@@ -31,6 +31,7 @@ class Detail extends React.Component{
         
         GetDetailMovie(id).then((res) => {
             console.log(res);
+            const poster = res.data.belongs_to_collection == null ? res.data.poster_path : res.data.belongs_to_collection.poster_path;
             this.setState({
                 title : res.data.title,
                 genres : res.data.genres,
@@ -42,7 +43,7 @@ class Detail extends React.Component{
                 overview : res.data.overview,
                 hour : parseInt(res.data.runtime/60),
                 minute : res.data.runtime%60,
-                poster : res.data.belongs_to_collection.poster_path
+                poster : poster
             })
         })
     }
@@ -51,11 +52,11 @@ class Detail extends React.Component{
 
     render(){
         return(
-            <div className="detail-container shadow container mx-auto row p-3 my-3">
-                <div className="poster-movie col-12 col-md-5">
-                    <img src={IMAGE_URL+'w500'+this.state.poster}  className="w-100"/>
+            <div className="detail-container shadow container mx-auto d-flex flex-wrap p-3 my-3">
+                <div className="poster-movie col-12 col-md-4">
+                    <img src={IMAGE_URL+'w500'+this.state.poster} className="w-100" alt="this.state.poster"/>
                 </div>
-                <div className="info-movie col-12 col-md-6">
+                <div className="info-movie col-md-12 col-lg-6 ms-md-3">
                     <h1 className="title">{this.state.title}</h1>
                     <div className="general-info">
                         {this.state.genres.map((genre,index) => {
@@ -75,12 +76,12 @@ class Detail extends React.Component{
                         <h4>Overview</h4>
                         {this.state.overview}
                     </div>
-                    <div className="companies row g-0 mt-3">
-                        <h4>Production Companies</h4>
+                    <h4 className="mt-3">Production Companies</h4>
+                    <div className="companies d-flex flex-wrap g-0 mt-3">
                         {this.state.companies.map(company => {
-                            return <div key={company.id} className="company col-5 col-md-3 m-1 d-flex align-items-center">
+                            return <div key={company.id} className="company col-sm-4 col-md-3 m-2 d-flex align-items-center">
                                         <div className="image">
-                                            <img src={IMAGE_URL+'w200'+company.logo_path} alt={company.logo_path} style={company.id == 34 ? {width:70} : {}}/>
+                                            <img src={IMAGE_URL+'w200'+company.logo_path} alt={company.logo_path} style={company.id == 34 ? {width:70} : {}} className="w-100"/>
                                         </div>
                                     </div>
                         })}
