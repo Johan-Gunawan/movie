@@ -6,17 +6,17 @@
 }
 
 .sidebar_container{
-    position: sticky;
+    position: fixed;
     height: 100vh;
-    transition: all 1s;
+    transition: all 0.5s;
     width: 200px;
     top: 0;
     left: 0;
+    z-index: 1000;
 }
 
 .sidebar_container.hide{
-    position: relative;
-    transition: all 1s;
+    transition: all 0.5s;
     top: 0;
     left: -200px;
     /* display: none; */
