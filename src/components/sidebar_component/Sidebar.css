@@ -1,0 +1,39 @@
+.wrapper{
+    position: absolute;
+    right: -20px;
+    top: 100px;
+    z-index: 1000;
+}
+
+.sidebar_container{
+    position: sticky;
+    height: 100vh;
+    transition: all 1s;
+    width: 200px;
+    top: 0;
+    left: 0;
+}
+
+.sidebar_container.hide{
+    position: relative;
+    transition: all 1s;
+    top: 0;
+    left: -200px;
+    /* display: none; */
+}
+
+.sidebar_container ul li{
+    list-style: none;
+}
+
+.sidebar_container ul li button,.sidebar_container ul li a{
+    color: white;
+    text-decoration: none;
+}
+
+.transform-180{
+    transform: rotate(180deg);
+}
+.btn-toggle:hover{
+    color: lightgrey;
+}

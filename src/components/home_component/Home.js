@@ -14,7 +14,6 @@ class Home extends React.Component{
 
     componentDidMount(){
         GetListMovies(this.state.page).then(res => {
-            console.log(res.data.results);
             this.setState({
                 listMovies : res.data.results
             })
@@ -24,7 +23,7 @@ class Home extends React.Component{
 
     render(){
         return(
-            <div className='home-container p-3'>
+            <div className='home-container p-5'>
                 <h1>Now Playing Movie</h1>
                 <hr/>
                 <ListCard movies={this.state.listMovies} />

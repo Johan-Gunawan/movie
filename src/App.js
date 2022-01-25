@@ -5,13 +5,15 @@ import Register from './components/register_component/Register';
 import Detail from './components/detail_component/Detail';
 import Home from './components/home_component/Home';
 import Favorite from './components/favorite_component/Favorite';
+import Sidebar from './components/sidebar_component/Sidebar';
 
 
 function App() {
 	return (
-		<div className="App">
+		<div className="App d-flex">
 			<BrowserRouter>
-				<Navbar />
+				{/* <Navbar /> */}
+				<Sidebar />
 				<Routes>
 					<Route path="/" element={<Home />}/>
 					<Route path="/login" element={<Login />} />

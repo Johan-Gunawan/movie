@@ -1,7 +1,8 @@
 import React from "react";
-import { db } from "../../DexieDB";
 import {Navigate} from 'react-router-dom';
-import { hashPassword } from "../../utils/Encryption";
+import { addUser, getOneUserByUsername} from '../../models/User';
+import { generateToken } from "../../utils/Functions";
+
 
 class Register extends React.Component{
 	constructor(props){
@@ -16,7 +17,7 @@ class Register extends React.Component{
 			showErrorUsername : false,
 			showErrorPassword : false,
 			showErrorConfirmPassword : false,
-			redirectToLogin : false,
+			successRegister : false,
         }
 	}
 
@@ -71,6 +72,17 @@ class Register extends React.Component{
 			success = false;
 		}
 
+		const userData = await getOneUserByUsername(this.state.valueUsername);
+
+		if(userData !== undefined){
+			this.setState({
+				showErrorUsername : true,
+				usernameError : "Username already exists!"
+			})
+
+			success = false;
+		}
+
 		if(this.state.valuePassword.length < 8){
 			this.setState({
 				showErrorPassword : true,
@@ -88,31 +100,36 @@ class Register extends React.Component{
 		}
 		
 		if(success){
-			const id = await db.users.add({
-				username : this.state.valueUsername,
-				password : hashPassword(this.state.valuePassword).toString(),
-				token : ''
-			})
+			const result = await addUser({username : this.state.valueUsername, password : this.state.valuePassword, token : generateToken()});
 
-			this.setState({
-				redirectToLogin : true
-			})
+			if(result > 0){
+				this.setState({
+					successRegister : true
+				})
+			}
+			else{
+				
+			}
 		}
-		
     }
 
 	render(){
 
-		if(this.state.redirectToLogin){
-			return (
-				<Navigate to="/login" />
-			)
-		}
+		// if(this.state.redirectToLogin){
+		// 	return (
+		// 		<Navigate to="/login" />
+		// 	)
+		// }
 		
 		return (
 			<div className="register_container container col-5 mt-5 bg-light rounded shadow p-4">
 				<h1>Registration Form</h1>
 				<hr />
+				{this.state.successRegister && <div class="alert alert-primary" role="alert">
+					Register success, You can login right now!
+				</div>}
+
+				{!this.state.successRegister &&
 				<form onSubmit={this.handleSubmit}>
                     <div className="mb-3">
                         <label htmlFor="username" className="form-label">Username</label>
@@ -136,7 +153,7 @@ class Register extends React.Component{
 						</div>
                     </div>
                     <button type="submit" className="btn btn-primary">Register</button>
-                </form>
+                </form>}
 			</div>
 		)
 	}

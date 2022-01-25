@@ -16,7 +16,7 @@ class Card extends React.Component{
             imageCard :  IMAGE_URL+'/w200/'+this.props.movie.poster_path,
             favorite : false,
             showError : false,
-            showFavoriteButton : true && !props.favoritePage,
+            showFavoriteButton : false && !props.favoritePage,
             showDeleteButton : props.favoritePage
         }
     }
@@ -94,15 +94,15 @@ class Card extends React.Component{
                 <div className="card-body position-absolute">
                     <div className="info position-absolute p-2">
                         <div className="vote mb-2"><i className="fas fa-star"></i> {this.props.movie.vote_average}</div>
-                        <div className="release mb-3"><i class="far fa-calendar-minus"></i> {this.props.movie.release_date}</div>
+                        <div className="release mb-3"><i className="far fa-calendar-minus"></i> {this.props.movie.release_date}</div>
                         <div className="title">
                             <h5 className="card-title">{this.props.movie.title}</h5>    
                         </div>
                         <div className="detail-link text-center">
-                            <Link to={`/detail/${this.props.movie.movie_id !== undefined ? this.props.movie.movie_id : this.props.movie.id}`} className="nav-link active" aria-current="page" href="#">Detail <i class="fas fa-angle-right"></i></Link>
+                            <Link to={`/detail/${this.props.movie.movie_id !== undefined ? this.props.movie.movie_id : this.props.movie.id}`} className="nav-link active" aria-current="page" href="#">Detail <i className="fas fa-angle-right"></i></Link>
                         </div>
                     </div>
-                    {this.state.showDeleteButton && <button className={`delete-button btn`} onClick={this.handleOnDelete}><i class="far fa-trash-alt"></i></button>}
+                    {this.state.showDeleteButton && <button className={`delete-button btn`} onClick={this.handleOnDelete}><i className="far fa-trash-alt"></i></button>}
                 </div>
                 {this.state.showFavoriteButton && <button className={`favorite-button btn`} onClick={this.handleOnClick}>{this.state.favorite ? <i className="fas fa-heart favorite"></i> : <i className="far fa-heart"></i> } </button>}
             </div>
